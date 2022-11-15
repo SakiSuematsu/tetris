@@ -1,0 +1,39 @@
+body {
+    background: #ddf5ff;
+}
+
+#container {
+    margin: 0;
+    width: 100px;
+}
+
+#wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+}
+
+#btn {
+    width: 150px;
+    margin-left: 100px;
+}
+
+.left_wrapper .right_wrapper {
+    width: 320px;
+}
+
+.left_wrapper>dl .right_wrapper>dl {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.content_title {
+    width: 100px;
+    margin: 0;
+}
+
+.content_text {
+    width: 220px;
+    margin: 0;
+}

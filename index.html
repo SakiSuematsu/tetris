@@ -1,35 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="main.css">
     <title>テトリス</title>
-    <style>
-        body {
-            background: #ddf5ff;
-        }
-
-        #container {
-            margin: 0;
-            width: 100px;
-        }
-
-        #wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: auto;
-        }
-
-        #btn {
-            width: 150px;
-            margin-left: 100px;
-        }
-    </style>
 </head>
 
 <body onload="init()">
     <div id="wrapper">
+        <div class="left_wrapper">
+            <dl>
+                <dt class="content_title">ユーザ名
+                <dd class="content_text"><input type="text" id="user_name"></dd>
+                </dt>
+                <dt class="content_title">　
+                <dd class="content_text"><input type="button" id="save" value="登録する"></dd>
+                </dt>
+            </dl>
+        </div>
         <div id="container">
             <canvas id="cvs"></canvas>
         </div>
@@ -38,7 +30,21 @@
             <button onclick="location.href='../janken.html'">もう一回じゃんけん</button>
         </div>
         -->
+        <div class="right_wrapper">
+            <dl>
+                <dt class="content_title">得点
+                <dd class="content_text"><input type=" text" id="point"></dd>
+                </dt>
+                <dt class="content_title">消した行数
+                <dd class="content_text"><input type=" text" id="lines"></dd>
+                </dt>
+                <dt class="content_title">　
+                <dd class="content_text"><input type="button" id="again" value="もう一回遊ぶ"></dd>
+                </dt>
+            </dl>
+        </div>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
         //落下サイクル(小さい方が速い)
         const speed = 300;
@@ -342,6 +348,44 @@
 
             draw();
         };
+        ///////////////////////////
+        //  その他処理  ////////////
+        ///////////////////////////
+
+        //もう一回遊ぶのボタン
+        const btn = document.getElementById("again");
+        btn.addEventListener("click", function () {
+            window.location.reload();
+        });
+
+        //名前の登録
+        $('#save').on('click', function () {
+            const user_name = $('#user_name').val();
+            const data = {
+                user_name: user_name,
+            };
+            const jsonData = JSON.stringify(data);
+            localStorage.setItem('play_data', jsonData);
+        }
+        );
+
+        //データを保存
+
+        //データを削除
+        $('#clear').on('click', function () {
+            localStorage.removeItem('memo');
+            $('#input').val('');
+            $('#btn').val('');
+            $('#text_area').val('');
+        }
+        );
+        //データの取得
+        if (localStorage.getItem('memo')) {
+            const jsonData = localStorage.getItem('memo');
+            const data = JSON.parse(jsonData);
+            $('#input').val(data.title);
+            $('#text_area').val(data.text);
+        }
     </script>
 </body>
 
