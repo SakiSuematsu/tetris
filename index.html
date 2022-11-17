@@ -14,32 +14,40 @@
     <div id="wrapper">
         <div class="left_wrapper">
             <dl>
-                <dt class="content_title">ユーザ名
-                <dd class="content_text"><input type="text" id="user_name"></dd>
-                </dt>
-                <dt class="content_title">　
-                <dd class="content_text"><input type="button" id="save" value="登録する"></dd>
-                </dt>
+
             </dl>
         </div>
         <div id="container">
             <canvas id="cvs"></canvas>
         </div>
-        <!--
-        <div id="btn">
-            <button onclick="location.href='../janken.html'">もう一回じゃんけん</button>
-        </div>
-        -->
+
         <div class="right_wrapper">
             <dl>
-                <dt class="content_title">得点
-                <dd class="content_text"><input type=" text" id="point"></dd>
+                <dt class="content_title">ユーザ名
+                <dd class="content_text"><input type="text" id="user_name"></dd>
                 </dt>
+                <dt class="content_title">得点
+                <dd class="content_text"><span id="score">0</span></dd>
+                <!-- <dd class="content_text">
+                    <input type="text" id="score">0
+                </dd> -->
+                </dt>
+                <!--
+                <dt class="content_title">消した行数(計算用)
+                <dd class="content_text"><span id="line">0</span></dd>
+                </dt>
+                -->
                 <dt class="content_title">消した行数
-                <dd class="content_text"><input type=" text" id="lines"></dd>
+                <dd class="content_text"><span id="lines">0</span></dd>
+                </dt>
+                <dt class="content_title">　
+                <dd class="content_text"><input type="button" id="save" value="記録する"></dd>
                 </dt>
                 <dt class="content_title">　
                 <dd class="content_text"><input type="button" id="again" value="もう一回遊ぶ"></dd>
+                </dt>
+                <dt class="content_title">　
+                <dd class="content_text"><input type="button" id="clear" value="セーブデータ初期化"></dd>
                 </dt>
             </dl>
         </div>
@@ -77,42 +85,42 @@
                 [0, 1, 1, 0],
                 [0, 0, 0, 0],
             ],
-            [
-                [0, 0, 0, 0],
-                [0, 1, 0, 0],
-                [1, 1, 1, 0],
-                [0, 0, 0, 0],
-            ],
-            [
-                [0, 0, 0, 0],
-                [1, 1, 0, 0],
-                [0, 1, 1, 0],
-                [0, 0, 0, 0],
-            ],
-            [
-                [0, 0, 0, 0],
-                [0, 0, 1, 1],
-                [0, 1, 1, 0],
-                [0, 0, 0, 0],
-            ],
+            // [
+            //     [0, 0, 0, 0],
+            //     [0, 1, 0, 0],
+            //     [1, 1, 1, 0],
+            //     [0, 0, 0, 0],
+            // ],
+            // [
+            //     [0, 0, 0, 0],
+            //     [1, 1, 0, 0],
+            //     [0, 1, 1, 0],
+            //     [0, 0, 0, 0],
+            // ],
+            // [
+            //     [0, 0, 0, 0],
+            //     [0, 0, 1, 1],
+            //     [0, 1, 1, 0],
+            //     [0, 0, 0, 0],
+            // ],
             [
                 [0, 0, 0, 0],
                 [1, 1, 1, 1],
                 [0, 0, 0, 0],
                 [0, 0, 0, 0],
             ],
-            [
-                [0, 0, 0, 0],
-                [1, 1, 1, 0],
-                [0, 0, 1, 0],
-                [0, 0, 0, 0],
-            ],
-            [
-                [0, 0, 0, 0],
-                [0, 0, 1, 0],
-                [1, 1, 1, 0],
-                [0, 0, 0, 0],
-            ],
+            // [
+            //     [0, 0, 0, 0],
+            //     [1, 1, 1, 0],
+            //     [0, 0, 1, 0],
+            //     [0, 0, 0, 0],
+            // ],
+            // [
+            //     [0, 0, 0, 0],
+            //     [0, 0, 1, 0],
+            //     [1, 1, 1, 0],
+            //     [0, 0, 0, 0],
+            // ],
         ];
 
         //テトリミノの色
@@ -144,6 +152,12 @@
 
         //ゲームオーバーフラグ
         let isGameOver = false;
+
+        //消した行数
+        this.deletedLines = 0;
+
+        //初期スコア
+        this.totalScore = 0;
 
         //描画処理
         const draw = () => {
@@ -287,7 +301,23 @@
                             //一列上の情報をコピーする
                             board[ny][nx] = board[ny - 1][nx];
                         }
+
+                        //消した行数をカウント
+                        // let line_cnt = document.getElementById("line");
+                        // linecount = 0;
+                        // linecount++;
+                        // line_cnt.innerText = "" + linecount;
+                        // console.log("count", line_cnt.innerText);
                     }
+                    //消した行数の合計をカウント
+                    let linesElem = document.getElementById("lines");
+                    this.deletedLines++;
+                    linesElem.innerText = "" + this.deletedLines;
+                    console.log("total_count", linesElem.innerText);
+                    //スコア計算
+                    let scoreElem = document.getElementById("score");
+                    this.totalScore += 100;
+                    scoreElem.innerText = "" + this.totalScore;
                 }
             }
         };
@@ -348,9 +378,24 @@
 
             draw();
         };
+
+
         ///////////////////////////
         //  その他処理  ////////////
         ///////////////////////////
+
+
+
+        //名前の登録
+        // $('#save').on('click', function () {
+        //     const user_name = $('#user_name').val();
+        //     const data = {
+        //         user_name: user_name,
+        //     };
+        //     const jsonData = JSON.stringify(data);
+        //     localStorage.setItem('play_data', jsonData);
+        // }
+        // );
 
         //もう一回遊ぶのボタン
         const btn = document.getElementById("again");
@@ -358,30 +403,39 @@
             window.location.reload();
         });
 
-        //名前の登録
+        // for (let i = 0; i < localStorage.length; i++) {
+        //     const storage = localStorage.getItem(localStorage.key(i));
+        //     const js = JSON.parse(storage);
+
+        // }
+
+        //結果を保存
         $('#save').on('click', function () {
             const user_name = $('#user_name').val();
-            const data = {
+            // const score = $('#score').val();
+            const score = document.getElementById("score");
+            const lines = $('#lines').val();
+            const result = {
                 user_name: user_name,
+                score: score,
+                lines: lines,
             };
-            const jsonData = JSON.stringify(data);
+            const jsonData = JSON.stringify(result);
             localStorage.setItem('play_data', jsonData);
         }
         );
 
-        //データを保存
-
         //データを削除
         $('#clear').on('click', function () {
-            localStorage.removeItem('memo');
-            $('#input').val('');
-            $('#btn').val('');
-            $('#text_area').val('');
+            localStorage.removeItem('play_data');
+            $('#user_name').val('');
+            $('#score').val('');
+            $('#lines').val('');
         }
         );
         //データの取得
-        if (localStorage.getItem('memo')) {
-            const jsonData = localStorage.getItem('memo');
+        if (localStorage.getItem('play_data')) {
+            const jsonData = localStorage.getItem('play_data');
             const data = JSON.parse(jsonData);
             $('#input').val(data.title);
             $('#text_area').val(data.text);
