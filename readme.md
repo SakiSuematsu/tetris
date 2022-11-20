@@ -2,7 +2,7 @@
 
 ## DEMO
 
-  - デプロイしている場合はURLを記入（任意）
+  - https://sakisuematsu.github.io/tetris/
 
 ## 紹介と使い方
 
@@ -33,3 +33,4 @@
 ## 参考にした web サイトなど
 
   - テトリスの消した行数の表示　http://kmaebashi.com/programmer/tetris/index.html
+  - スコアの表示　https://ryugak.github.io/ryugakobayashi.tetris/

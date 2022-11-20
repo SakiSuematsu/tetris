@@ -13,9 +13,16 @@
 <body onload="init()">
     <div id="wrapper">
         <div class="left_wrapper">
-            <dl>
-
-            </dl>
+            <p>移動 / 方向キー　←↓→</p>
+            <p>回転 / スペースキー</p>
+            <div class="modal__content">
+                <p class="modalContent__head">ランキング</p>
+                <ul class="modalContent__list">
+                    <li id="rankingFirst"></li>
+                    <li id="rankingSecond"></li>
+                    <li id="rankingThird"></li>
+                </ul>
+            </div>
         </div>
         <div id="container">
             <canvas id="cvs"></canvas>
@@ -27,8 +34,10 @@
                 <dd class="content_text"><input type="text" id="user_name"></dd>
                 </dt>
                 <dt class="content_title">得点
+                <dd class="content_text"><span id="score__val">0</span></dd>
+                <!--
                 <dd class="content_text"><span id="score">0</span></dd>
-                <!-- <dd class="content_text">
+                 <dd class="content_text">
                     <input type="text" id="score">0
                 </dd> -->
                 </dt>
@@ -36,9 +45,11 @@
                 <dt class="content_title">消した行数(計算用)
                 <dd class="content_text"><span id="line">0</span></dd>
                 </dt>
-                -->
                 <dt class="content_title">消した行数
                 <dd class="content_text"><span id="lines">0</span></dd>
+                -->
+                <dt class="content_title">消した行数
+                <dd class="content_text"><span id="line__val">0</span></dd>
                 </dt>
                 <dt class="content_title">　
                 <dd class="content_text"><input type="button" id="save" value="記録する"></dd>
@@ -54,6 +65,35 @@
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
+        //スコアの処理
+
+        let get = localStorage.getItem('score');
+        let ranking = '';
+        try {
+            ranking = get.split(',');
+        } catch {
+            ranking = [0, 0, 0];
+        }
+        ranking.sort((a, b) => {
+            return b - a;
+        });
+
+        const rankingFirst = document.getElementById('rankingFirst');
+        const rankingSecond = document.getElementById('rankingSecond');
+        const rankingThird = document.getElementById('rankingThird');
+        rankingFirst.innerHTML = '1st. ' + ranking[0];
+        rankingSecond.innerHTML = '2nd.' + ranking[1];
+        rankingThird.innerHTML = '3rd.' + ranking[2];
+
+        let count = 0; //deletesLineとの兼ね合い要確認
+        const score = document.getElementById('score__val');
+        let scoreVal = 0;
+        const line = document.getElementById('line__val');
+        let lineVal = 0;
+        const scoreRank = ranking;
+
+
+
         //落下サイクル(小さい方が速い)
         const speed = 300;
         //ブロック1マスの大きさ
@@ -309,15 +349,22 @@
                         // line_cnt.innerText = "" + linecount;
                         // console.log("count", line_cnt.innerText);
                     }
-                    //消した行数の合計をカウント
-                    let linesElem = document.getElementById("lines");
-                    this.deletedLines++;
-                    linesElem.innerText = "" + this.deletedLines;
-                    console.log("total_count", linesElem.innerText);
-                    //スコア計算
-                    let scoreElem = document.getElementById("score");
-                    this.totalScore += 100;
-                    scoreElem.innerText = "" + this.totalScore;
+                    // //消した行数の合計をカウント
+                    // let linesElem = document.getElementById("lines");
+                    // this.deletedLines++;
+                    // linesElem.innerText = "" + this.deletedLines;
+                    // console.log("total_count", linesElem.innerText);
+
+                    // //スコア計算
+                    // let scoreElem = document.getElementById("score");
+                    // this.totalScore += 100;
+                    // scoreElem.innerText = "" + this.totalScore;
+
+                    scoreVal = scoreVal + 200;
+                    score.innerHTML = scoreVal;
+                    count++;
+                    lineVal = count;
+                    line.innerHTML = lineVal;
                 }
             }
         };
@@ -342,7 +389,17 @@
                 if (!canMove(0, 0)) {
                     isGameOver = true;
                     clearInterval(timerId);
+                    scoreRank.push(scoreVal);
+                    scoreRank.sort((a, b) => {
+                        return b - a;
+                    })
                 }
+                localStorage.setItem('score', scoreRank);
+                let get = localStorage.getItem('score');
+                let ranking = get.split(',');
+                rankingFirst.innerHTML = '1st. ' + ranking[0];
+                rankingSecond.innerHTML = '2nd.' + ranking[1];
+                rankingThird.innerHTML = '3rd.' + ranking[2];
             }
             draw();
         };
@@ -440,6 +497,7 @@
             $('#input').val(data.title);
             $('#text_area').val(data.text);
         }
+
     </script>
 </body>
 
